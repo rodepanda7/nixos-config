@@ -1,5 +1,11 @@
 # configuration.nix
-{ config, pkgs, pkgs-unstable, theme, ... }:
+{
+  config,
+  pkgs,
+  pkgs-unstable,
+  theme,
+  ...
+}:
 
 {
   imports = [
@@ -16,13 +22,13 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Networking
-  networking.hostName = "larry-desktop";
+  networking.hostName = "nixos";
   networking.networkmanager.enable = true; # GUI network management
   networking.networkmanager.plugins = with pkgs; [
     networkmanager-openvpn
     networkmanager-openconnect
   ];
-  
+
   # Disable IPv6 to prevent VPN leaks
   networking.enableIPv6 = false;
 
@@ -35,7 +41,7 @@
 
   # DNS resolution service for caching and security
   services.resolved.enable = true;
-  
+
   # Enable UPower for power management information
   services.upower.enable = true;
 
@@ -43,12 +49,12 @@
   services.printing = {
     enable = true;
     drivers = with pkgs; [
-      brlaser              # Brother laser printer driver (open source)
-      brgenml1lpr          # Brother generic LPR driver
-      brgenml1cupswrapper  # Brother generic CUPS wrapper
+      brlaser # Brother laser printer driver (open source)
+      brgenml1lpr # Brother generic LPR driver
+      brgenml1cupswrapper # Brother generic CUPS wrapper
     ];
   };
-  
+
   # Enable network printer discovery
   services.avahi = {
     enable = true;
@@ -71,14 +77,20 @@
   };
 
   # User account configuration
-  users.users.lrabbets = {
+  users.users.floris = {
     isNormalUser = true;
-    description = "Lawrence Rabbets";
-    extraGroups = [ "networkmanager" "wheel" ]; # wheel = sudo access
+    description = "derodepanda";
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ]; # wheel = sudo access
   };
 
+  # users.users.lrabbets.group = "lrabbets";
+  # users.groups.lrabbets = {};
+
   programs.zsh.enable = true; # Enable Zsh system-wide
-  
+
   # SSH agent disabled - using 1Password SSH agent instead
   programs.ssh.startAgent = false;
 
@@ -88,20 +100,26 @@
     useUserPackages = true; # Install to user profile
     backupFileExtension = "backup"; # Backup existing files instead of failing
     extraSpecialArgs = { inherit pkgs-unstable theme; }; # Pass variables to home config
-    users.lrabbets = { ... }: {
+    users.floris = { ... }: {
       # User configuration defined in home.nix
     };
   };
 
   # Nix configuration
-  nix.settings.trusted-users = [ "root" "lrabbets" ]; # Users who can configure Nix
-  nix.settings.experimental-features = [ "nix-command" "flakes" ]; # Enable new Nix CLI
+  nix.settings.trusted-users = [
+    "root"
+    "floris"
+  ]; # Users who can configure Nix
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ]; # Enable new Nix CLI
   nix.settings.download-buffer-size = 134217728; # 128MB download buffer (default: 64MB)
-  
+
   # Development environment optimization
   nix.settings.keep-outputs = true; # Keep build outputs for development shells
   nix.settings.keep-derivations = true; # Keep derivations for development shells
-  
+
   nixpkgs.config.allowUnfree = true; # Allow proprietary software
 
   # Automatic garbage collection - runs daily and keeps only last 3 days
@@ -110,17 +128,17 @@
     dates = "daily"; # Run every day at 03:15
     options = "--delete-older-than 3d"; # Keep only last 3 days (very aggressive)
   };
-  
+
   # Run user garbage collection alongside system cleanup
   systemd.user.services.nix-gc-user = {
     description = "Nix Garbage Collector (User)";
     script = "${pkgs.nix}/bin/nix-collect-garbage --delete-older-than 3d";
     serviceConfig = {
       Type = "oneshot";
-      User = "lrabbets";
+      User = "floris";
     };
   };
-  
+
   systemd.user.timers.nix-gc-user = {
     description = "Nix Garbage Collection Timer (User)";
     wantedBy = [ "timers.target" ];
@@ -151,13 +169,6 @@
     config.common.default = "*";
   };
 
-  # Enable PAM authentication for screen locking
-  security.pam.services.hyprlock = {};
-
-  # Enable gnome-keyring for 1Password secret storage
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.sddm.enableGnomeKeyring = true;
-
   # Enable automatic trim
   services.fstrim.enable = true;
 
@@ -167,36 +178,14 @@
     enable32Bit = true; # Required for Wine/Steam Proton games
   };
 
-  # Enable NVIDIA driver loading
-  services.xserver.videoDrivers = [ "nvidia" ];
-  services.xserver.screenSection = ''
-    Option "Coolbits" "28"
-  '';
-
-  # NVIDIA driver configuration
-  hardware.nvidia = {
-    modesetting.enable = true; # Required for Wayland
-    open = false; # Use proprietary driver (better gaming performance)
-    nvidiaSettings = true; # Include nvidia-settings GUI
-    package = config.boot.kernelPackages.nvidiaPackages.stable; # Stable driver version
-    
-    # Enable power management and persistence for GPU control
-    powerManagement.enable = true;
-    powerManagement.finegrained = false;
-  };
-
+ 
   # Enable swap for better memory pressure handling
-  swapDevices = [ {
-    device = "/var/lib/swapfile";
-    size = 8*1024; # 8GB swap file
-  } ];
-
-  # Fix NVIDIA device node creation
-  services.udev.extraRules = ''
-    KERNEL=="nvidia_uvm", OWNER="root", GROUP="video", MODE="0660"
-    KERNEL=="nvidia*", OWNER="root", GROUP="video", MODE="0660"
-    KERNEL=="nvidiactl", OWNER="root", GROUP="video", MODE="0660"
-  '';
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 8 * 1024; # 8GB swap file
+    }
+  ];
 
   # Ensure NFS state directories exist
   systemd.tmpfiles.rules = [
@@ -204,19 +193,6 @@
     "d /var/lib/nfs/sm 0755 root root"
     "d /var/lib/nfs/sm.bak 0755 root root"
   ];
-
-  # GPU clock speed configuration via systemd service
-  systemd.services.gpu-undervolt = {
-    description = "GPU Undervolting Service";
-    after = [ "graphical-session.target" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "/run/current-system/sw/bin/nvidia-smi -lgc 1830";
-      User = "root";
-    };
-  };
 
   system.stateVersion = "25.05";
 }

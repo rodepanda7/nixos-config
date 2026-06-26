@@ -3,10 +3,10 @@
 
 {
   # Set the default shell for the user at the system level
-  users.users.lrabbets.shell = pkgs.zsh;
+  users.users.floris.shell = pkgs.zsh;
 
   # Home Manager configuration for user environment
-  home-manager.users.lrabbets = {
+  home-manager.users.floris = {
     imports = [
       # Catppuccin theming system
       catppuccin.homeModules.catppuccin
@@ -17,7 +17,6 @@
       ./home/wofi.nix          # Application launcher
       ./home/wlogout.nix       # Logout menu
       ./swww/swww.nix          # Animated wallpaper manager
-      ./hyprlock/hyprlock.nix   # Screen locker
       
       # Applications and tools
       ./home/packages.nix      # System packages
@@ -27,12 +26,11 @@
       ./home/vscode.nix        # Code editor
       ./home/neovim.nix        # Terminal editor
       ./home/kitty.nix         # Terminal emulator
-      ./home/1password.nix     # Password manager
+      ./home/keyremaps.nix
       
       # Shell and development environment
       ./home/shell.nix         # Zsh configuration
       ./home/git.nix           # Git settings
-      ./home/scripts.nix       # Custom scripts
       ./home/direnv.nix        # Development environment management
       
       # System integration

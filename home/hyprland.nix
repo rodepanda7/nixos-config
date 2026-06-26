@@ -26,11 +26,6 @@ let
   # Create the final list of formatted keybindings
   formatted-keybinds = pkgs.lib.map format-keybind keybinds;
 
-  # writeShellScriptBin creates an executable script in your PATH
-  keybinds-script = pkgs.writeShellScriptBin "hypr-keybinds" ''
-    echo -e "${pkgs.lib.concatStringsSep "\\n" formatted-keybinds}" | wofi --show dmenu --allow-markup -p "Hyprland Keybindings"
-  '';
-
 in
 # This is the end of the 'let' block and the start of your main config
 
@@ -41,8 +36,10 @@ in
     enable = true;
     package = pkgs-unstable.hyprland; # Use unstable (0.52+) for crash fixes
     settings = {
-      monitor = ",preferred,auto,1";
-
+    monitor = [
+      "eDP-1,2880x1800@90,0x0,1.5"
+      "DP-2,1920x1080@60,1920x0,1,sdrbrightness, 1.9, sdrsaturation, 0.98"
+    ];
       # Environment variables to ensure applications detect dark mode
       env = [
         "GTK_THEME,Adwaita:dark"
@@ -65,6 +62,14 @@ in
 
       bind = [
         # -- App Launchers --
+	"$mainMod, S, exec, snip"
+	"SUPER,Super_L,exec, pkill rofi || rofi -show drun -modi drun"
+	"$mainMod, Tab, cyclenext"
+	"$mainMod, Tab, bringactivetotop"
+	"$mainMod, Tab, fullscreen, 1"
+	"$mainMod, S, exec, hyprshot -m region --clipboard-only"
+	"$mainMod SHIFT, S, exec, hyprshot -m region"
+
         "$mainMod, RETURN, exec, kitty"
         "$mainMod, D, exec, wofi --show drun"
         "$mainMod, E, exec, thunar"
@@ -82,7 +87,7 @@ in
         "$mainMod, Q, killactive,"
         "$mainMod, M, exit,"
         "$mainMod, F, fullscreen,"
-        "$mainMod, SPACE, togglefloating,"
+	"$mainMod, V, togglefloating"
         "$mainMod, P, pseudo, # dwindle"
         "$mainMod SHIFT, P, layoutmsg, togglesplit, # dwindle"
 
@@ -109,6 +114,9 @@ in
         # -- Clipboard Manager --
         "$mainMod, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy"
 
+	# -- show/hide waybar
+	"$mainMod, R, exec, $reload_waybar"
+
         # -- Workspace Navigation --
         "$mainMod, 1, workspace, 1"
         "$mainMod, 2, workspace, 2"
@@ -133,22 +141,23 @@ in
       ];
 
       general = {
-        gaps_in = 5;
-        gaps_out = 10;
-        border_size = 2;
+        gaps_in = 0;
+        gaps_out = 0;
+        border_size = 1;
         allow_tearing = true; # Reduces input lag for gaming
         # Border colors will be set by Catppuccin theme
       };
 
       decoration = {
-        rounding = 10;
+        rounding = 0;
         blur = {
           enabled = true;
           size = 5;
           passes = 2;
         };
       };
-
+	
+      # https://wiki.hyprland.org/Configuring/Variables/#animations
       animations = {
         enabled = true;
         bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
@@ -161,6 +170,15 @@ in
         ];
       };
 
+      # See https://wiki.hypr.land/Configuring/Gestures
+      gesture = "3, horizontal, workspace";
+
+      input = {
+        touchpad = {
+	  natural_scroll = true;
+	};
+      };
+
       # Window rules - automatically assign applications to specific workspaces
       # windowrule = [
       #   "workspace 2,class:^(brave-browser)$"
@@ -171,9 +189,6 @@ in
       # ];
     };
   };
-
-  # Add our generated script to user packages
-  home.packages = [ keybinds-script ];
 
   # Enable Catppuccin theming for Hyprland
   catppuccin.hyprland.enable = true;
