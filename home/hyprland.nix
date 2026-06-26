@@ -1,11 +1,17 @@
-{ pkgs, pkgs-unstable, config, ...}:
+{
+  pkgs,
+  pkgs-unstable,
+  config,
+  ...
+}:
 
 let
   # Self-referencing: access our own config to generate a help script
   keybinds = config.wayland.windowManager.hyprland.settings.bind;
 
   # Function to format each keybinding line for display
-  format-keybind = bind:
+  format-keybind =
+    bind:
     let
       # Split the line by comma, e.g., "$mainMod, RETURN, exec, kitty"
       parts = pkgs.lib.splitString "," bind;
@@ -25,12 +31,13 @@ let
     echo -e "${pkgs.lib.concatStringsSep "\\n" formatted-keybinds}" | wofi --show dmenu --allow-markup -p "Hyprland Keybindings"
   '';
 
-in # This is the end of the 'let' block and the start of your main config
+in
+# This is the end of the 'let' block and the start of your main config
 
 {
-    # Hyprland window manager configuration
-    # This is the single source of truth for Hyprland version and settings
-    wayland.windowManager.hyprland = {
+  # Hyprland window manager configuration
+  # This is the single source of truth for Hyprland version and settings
+  wayland.windowManager.hyprland = {
     enable = true;
     package = pkgs-unstable.hyprland; # Use unstable (0.52+) for crash fixes
     settings = {
@@ -44,18 +51,18 @@ in # This is the end of the 'let' block and the start of your main config
         "GTK_APPLICATION_PREFER_DARK_THEME,1"
       ];
 
-      exec-once = [ 
+      exec-once = [
         "waybar"
-        "swww init"  # Initialize swww daemon
-        "wallpaper-rotate"  # Set random wallpaper at startup
-        "wl-paste --type text --watch cliphist store"  # Start clipboard history daemon
-        "wl-paste --type image --watch cliphist store"  # Store image clipboard items
-        "gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'"  # Set GTK dark theme
-        "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'"  # Set color scheme preference
+        "swww init" # Initialize swww daemon
+        "wallpaper-rotate" # Set random wallpaper at startup
+        "wl-paste --type text --watch cliphist store" # Start clipboard history daemon
+        "wl-paste --type image --watch cliphist store" # Store image clipboard items
+        "gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'" # Set GTK dark theme
+        "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'" # Set color scheme preference
       ];
 
       "$mainMod" = "SUPER";
-      
+
       bind = [
         # -- App Launchers --
         "$mainMod, RETURN, exec, kitty"
@@ -65,8 +72,7 @@ in # This is the end of the 'let' block and the start of your main config
         "$mainMod, B, exec, brave-dark"
         "$mainMod SHIFT, B, exec, firefox"
         "$mainMod, L, exec, hyprlock"
-        "$mainMod, R, exec, cider"
-        "$mainMod, X, exec, wlogout" 
+        "$mainMod, X, exec, wlogout"
 
         # -- Screenshots --
         ", Print, exec, screenshot full"
@@ -78,7 +84,7 @@ in # This is the end of the 'let' block and the start of your main config
         "$mainMod, F, fullscreen,"
         "$mainMod, SPACE, togglefloating,"
         "$mainMod, P, pseudo, # dwindle"
-        "$mainMod SHIFT, P, togglesplit, # dwindle"
+        "$mainMod SHIFT, P, layoutmsg, togglesplit, # dwindle"
 
         # -- Focus / Move with Arrow Keys --
         "$mainMod, left, movefocus, l"
@@ -125,7 +131,7 @@ in # This is the end of the 'let' block and the start of your main config
         "$mainMod SHIFT, 9, movetoworkspace, 9"
         "$mainMod SHIFT, 0, movetoworkspace, 10"
       ];
-      
+
       general = {
         gaps_in = 5;
         gaps_out = 10;
@@ -134,7 +140,7 @@ in # This is the end of the 'let' block and the start of your main config
         # Border colors will be set by Catppuccin theme
       };
 
-      decoration = { 
+      decoration = {
         rounding = 10;
         blur = {
           enabled = true;
@@ -144,7 +150,7 @@ in # This is the end of the 'let' block and the start of your main config
       };
 
       animations = {
-        enabled = true; 
+        enabled = true;
         bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
         animation = [
           "windows, 1, 7, myBezier"
@@ -156,13 +162,13 @@ in # This is the end of the 'let' block and the start of your main config
       };
 
       # Window rules - automatically assign applications to specific workspaces
-      windowrulev2 = [
-        "workspace 2,class:^(brave-browser)$"
-        "workspace 1,class:^(Godot)$"
-        "workspace 1,class:^(godot)$"
-        "tile,class:^(Godot)$"
-        "tile,class:^(godot)$"
-      ];
+      # windowrule = [
+      #   "workspace 2,class:^(brave-browser)$"
+      #   "workspace 1,class:^(Godot)$"
+      #   "workspace 1,class:^(godot)$"
+      #   "tile,class:^(Godot)$"
+      #   "tile,class:^(godot)$"
+      # ];
     };
   };
 
@@ -172,3 +178,4 @@ in # This is the end of the 'let' block and the start of your main config
   # Enable Catppuccin theming for Hyprland
   catppuccin.hyprland.enable = true;
 }
+
