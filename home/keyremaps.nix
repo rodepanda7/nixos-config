@@ -1,9 +1,13 @@
 # home.nix
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
-  # Make sure you have the xremap Home Manager module imported if your setup requires it,
-  # or use the system-level module if you prefer. Here is the home.nix configuration:
+
+  imports =
+    [
+      inputs.xremap-flake.homeManagerModules.default
+    ];
+
   services.xremap = {
     enable = true;
     
@@ -14,10 +18,10 @@
           name = "Swap Caps and Escape";
           remap = {
             "CapsLock" = "Esc";
-            "Esc" = "CapsLock";
-          };
-        }
-      ];
-    };
+           "Esc" = "CapsLock";
+         };
+       }
+     ];
+   };
   };
 }

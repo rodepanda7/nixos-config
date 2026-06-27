@@ -31,6 +31,8 @@
       la = "eza -la --icons --git";
       lt = "eza --tree --level=2 --icons";
       cat = "bat";
+      nrs = "sudo nixos-rebuild switch --flake ~/nixos-config#nixos";
+      vim = "nvim";
     };
 
     # Oh My Zsh provides themes and plugins for zsh
