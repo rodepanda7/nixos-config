@@ -36,10 +36,10 @@ in
     enable = true;
     package = pkgs-unstable.hyprland; # Use unstable (0.52+) for crash fixes
     settings = {
-    monitor = [
-      "eDP-1,2880x1800@90,0x0,1.5"
-      "DP-2,1920x1080@60,1920x0,1,sdrbrightness, 1.9, sdrsaturation, 0.98"
-    ];
+      monitor = [
+        "eDP-1,2880x1800@90,0x0,1.5"
+        "DP-2,1920x1080@60,1920x0,1,sdrbrightness, 1.9, sdrsaturation, 0.98"
+      ];
       # Environment variables to ensure applications detect dark mode
       env = [
         "GTK_THEME,Adwaita:dark"
@@ -51,7 +51,6 @@ in
       exec-once = [
         "waybar"
         "swww init" # Initialize swww daemon
-        "wallpaper-rotate" # Set random wallpaper at startup
         "wl-paste --type text --watch cliphist store" # Start clipboard history daemon
         "wl-paste --type image --watch cliphist store" # Store image clipboard items
         "gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'" # Set GTK dark theme
@@ -62,13 +61,13 @@ in
 
       bind = [
         # -- App Launchers --
-	"$mainMod, S, exec, snip"
-	"SUPER,Super_L,exec, pkill rofi || rofi -show drun -modi drun"
-	"$mainMod, Tab, cyclenext"
-	"$mainMod, Tab, bringactivetotop"
-	"$mainMod, Tab, fullscreen, 1"
-	"$mainMod, S, exec, hyprshot -m region --clipboard-only"
-	"$mainMod SHIFT, S, exec, hyprshot -m region"
+        "$mainMod, S, exec, snip"
+        "SUPER,Super_L,exec, pkill rofi || rofi -show drun -modi drun"
+        "$mainMod, Tab, cyclenext"
+        "$mainMod, Tab, bringactivetotop"
+        "$mainMod, Tab, fullscreen, 1"
+        "$mainMod, S, exec, hyprshot -m region --clipboard-only"
+        "$mainMod SHIFT, S, exec, hyprshot -m region"
 
         "$mainMod, RETURN, exec, kitty"
         "$mainMod, D, exec, wofi --show drun"
@@ -87,7 +86,7 @@ in
         "$mainMod, Q, killactive,"
         "$mainMod, M, exit,"
         "$mainMod, F, fullscreen,"
-	"$mainMod, V, togglefloating"
+        "$mainMod, V, togglefloating"
         "$mainMod, P, pseudo, # dwindle"
         "$mainMod SHIFT, P, layoutmsg, togglesplit, # dwindle"
 
@@ -114,8 +113,8 @@ in
         # -- Clipboard Manager --
         "$mainMod, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy"
 
-	# -- show/hide waybar
-	"$mainMod, R, exec, $reload_waybar"
+        # -- show/hide waybar
+        "$mainMod, R, exec, $reload_waybar"
 
         # -- Workspace Navigation --
         "$mainMod, 1, workspace, 1"
@@ -156,7 +155,7 @@ in
           passes = 2;
         };
       };
-	
+
       # https://wiki.hyprland.org/Configuring/Variables/#animations
       animations = {
         enabled = true;
@@ -175,8 +174,8 @@ in
 
       input = {
         touchpad = {
-	  natural_scroll = true;
-	};
+          natural_scroll = true;
+        };
       };
 
       # Window rules - automatically assign applications to specific workspaces
@@ -193,4 +192,3 @@ in
   # Enable Catppuccin theming for Hyprland
   catppuccin.hyprland.enable = true;
 }
-

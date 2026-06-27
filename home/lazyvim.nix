@@ -31,7 +31,7 @@
     };
 
     # Additional packages (optional)
-    extraPackages = with pkgs; [
+    extraPackages = with pkgs-unstable; [
       nixd # Nix LSP
       alejandra # Nix formatter
       fish
@@ -59,7 +59,7 @@
     ];
 
     # Only needed for languages not covered by LazyVim extras
-    treesitterParsers = with pkgs.vimPlugins.nvim-treesitter-parsers; [
+    treesitterParsers = with pkgs-unstable.vimPlugins.nvim-treesitter-parsers; [
       wgsl # WebGPU Shading Language
       templ # Go templ files
       rust
