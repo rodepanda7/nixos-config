@@ -1,13 +1,27 @@
 { pkgs, ... }:
 
 {
-  programs.hyprpaper = {
+  services.hyprpaper = {
     enable = true;
-
-    wallpaper = {
-      monitor = "";
-      path = "/home/floris/nixos-config/wallpapers/nixos.png";
-      fit_mode = "cover";
+    settings = {
+      preload = [ "/home/floris/nixos-config/wallpapers/nixos.png" ];
+      wallpaper = [ ",/home/floris/nixos-config/wallpapers/nixos.png" ];
     };
-  }
+  };
+  # services.hyprpaper = {
+  #   enable = true;
+  #
+  #   settings = {
+  #     preload = [
+  #       "/home/floris/nixos-config/wallpapers/nixos.png"
+  #     ];
+  #
+  #     wallpaper = [
+  #       {
+  #         monitor = "";
+  #         path = "/home/floris/nixos-config/wallpapers/nixos.png";
+  #       }
+  #     ];
+  #   };
+  # };
 }

@@ -1,43 +1,51 @@
 # home.nix
-{ pkgs, pkgs-unstable, catppuccin, ... }:
+{
+  pkgs,
+  pkgs-unstable,
+  catppuccin,
+  inputs,
+  lazyvim,
+  ...
+}:
 
 {
   # Set the default shell for the user at the system level
   users.users.floris.shell = pkgs.zsh;
 
+  home-manager.extraSpecialArgs = { inherit inputs lazyvim; };
   # Home Manager configuration for user environment
   home-manager.users.floris = {
     imports = [
       # Catppuccin theming system
       catppuccin.homeModules.catppuccin
-      
+
       # Window manager and desktop environment
-      ./home/hyprland.nix      # Hyprland WM configuration
-      ./home/waybar.nix        # Status bar
-      ./home/wofi.nix          # Application launcher
-      ./home/wlogout.nix       # Logout menu
-      ./swww/swww.nix          # Animated wallpaper manager
-      
+      ./home/hyprland.nix # Hyprland WM configuration
+      ./home/waybar.nix # Status bar
+      ./home/wofi.nix # Application launcher
+      ./home/wlogout.nix # Logout menu
+      ./home/hyprpaper.nix # Wallpaper
+
       # Applications and tools
-      ./home/packages.nix      # System packages
+      ./home/packages.nix # System packages
       # ./home/python.nix      # Python development environment - moved to project flakes
-      ./home/cli-tools.nix     # CLI tools with Catppuccin theming
-      ./home/browsers.nix      # Web browsers (Firefox & Brave)
-      ./home/vscode.nix        # Code editor
-      ./home/neovim.nix        # Terminal editor
-      ./home/kitty.nix         # Terminal emulator
+      ./home/cli-tools.nix # CLI tools with Catppuccin theming
+      ./home/browsers.nix # Web browsers (Firefox & Brave)
+      ./home/vscode.nix # Code editor
+      ./home/lazyvim.nix # Terminal editor
+      ./home/kitty.nix # Terminal emulator
       ./home/keyremaps.nix
-      
+
       # Shell and development environment
-      ./home/shell.nix         # Zsh configuration
-      ./home/git.nix           # Git settings
-      ./home/direnv.nix        # Development environment management
-      
+      ./home/shell.nix # Zsh configuration
+      ./home/git.nix # Git settings
+      ./home/direnv.nix # Development environment management
+
       # System integration
-      ./home/environment.nix   # Environment variables and secrets
-      ./home/default-apps.nix  # Default applications
-      ./home/service.nix       # User services
-      ./home/gtk.nix           # GTK theming
+      ./home/environment.nix # Environment variables and secrets
+      ./home/default-apps.nix # Default applications
+      ./home/service.nix # User services
+      ./home/gtk.nix # GTK theming
     ];
 
     # Global Catppuccin configuration

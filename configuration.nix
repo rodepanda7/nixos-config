@@ -4,6 +4,7 @@
   pkgs,
   pkgs-unstable,
   theme,
+  inputs,
   ...
 }:
 
@@ -86,6 +87,12 @@
     ]; # wheel = sudo access
   };
 
+  # Enable xremap for home-manager
+  hardware.uinput.enable = true;
+
+  users.groups.input.members = [ "floris" ];
+  users.groups.uinput.members = [ "floris" ];
+
   # users.users.lrabbets.group = "lrabbets";
   # users.groups.lrabbets = {};
 
@@ -99,7 +106,7 @@
     useGlobalPkgs = true; # Use system nixpkgs
     useUserPackages = true; # Install to user profile
     backupFileExtension = "backup"; # Backup existing files instead of failing
-    extraSpecialArgs = { inherit pkgs-unstable theme; }; # Pass variables to home config
+    extraSpecialArgs = { inherit pkgs-unstable theme inputs; }; # Pass variables to home config
     users.floris = { ... }: {
       # User configuration defined in home.nix
     };
@@ -177,7 +184,6 @@
     enable = true;
     enable32Bit = true; # Required for Wine/Steam Proton games
   };
-
  
   # Enable swap for better memory pressure handling
   swapDevices = [

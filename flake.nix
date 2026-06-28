@@ -12,18 +12,16 @@
   };
 
   inputs = {
-    # Stable release branch for reliable system packages
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
-    # Unstable branch for latest packages (Firefox, development tools, etc.)
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    catppuccin.url = "github:catppuccin/nix/d75e3fe67f49728cb5035bc791f4b9065ff3a2c9";
+    xremap-flake.url = "github:xremap/nix-flake";
+    lazyvim.url = "github:pfassina/lazyvim-nix";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs"; # Use same nixpkgs version for consistency
     };
-    
-    # Catppuccin theming for comprehensive application support
-    catppuccin.url = "github:catppuccin/nix/d75e3fe67f49728cb5035bc791f4b9065ff3a2c9";
   };
 
   outputs =
@@ -33,6 +31,7 @@
       nixpkgs-unstable,
       home-manager,
       catppuccin,
+      lazyvim,
       ...
     }@inputs:
     let
@@ -55,6 +54,7 @@
               pkgs-unstable
               theme
               catppuccin
+              lazyvim
               ;
           }; # Pass variables to all modules
           modules = [

@@ -50,6 +50,7 @@ in
 
       exec-once = [
         "waybar"
+        "hyprpaper"
         "swww init" # Initialize swww daemon
         "wl-paste --type text --watch cliphist store" # Start clipboard history daemon
         "wl-paste --type image --watch cliphist store" # Store image clipboard items
