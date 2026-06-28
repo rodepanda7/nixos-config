@@ -1,7 +1,9 @@
 { host, ... }:
+
 {
   programs.hyprlock = {
     enable = true;
+    catppuccin.enable = false;
 
     settings = {
       general = {
@@ -13,26 +15,20 @@
       background = [
         {
           path = "${../wallpapers/nixos.png}";
-
-          color = "rgba(29, 32, 33, 255)";
-          blur_passes = 2;
-          vibrancy_darkness = 0.0;
         }
       ];
 
-      shape = [
-        # User box
+      # INPUT FIELD
+      input-field = [
         {
-          size = "300, 50";
-
-          rounding = 0;
-          border_size = 2;
-          color = "rgba(102, 92, 84, 0.33)";
-          border_color = "rgba(168, 153, 132, 0.95)";
-
-          position = "0, 270";
+          size = "500, 100";
+          dots_size = 0.3;
+          dots_center = true;
+          placeholder_text = "Enter password";
+          hide_input = false;
+          position = "0, 0";
           halign = "center";
-          valign = "bottom";
+          valign = "center";
         }
       ];
 
@@ -41,13 +37,13 @@
         {
           text = ''cmd[update:1000] echo "$(date +'%k:%M')"'';
 
-          font_size = 115;
+          font_size = 130;
           font_family = "Maple Mono Bold";
 
           shadow_passes = 3;
-          color = "rgba(235, 219, 178, 0.9)";
+          color = "$text";
 
-          position = "0, -150";
+          position = "0, -200";
           halign = "center";
           valign = "top";
         }
@@ -55,60 +51,17 @@
         {
           text = ''cmd[update:1000] echo "- $(date +'%A, %B %d') -" '';
 
-          font_size = 18;
+          font_size = 40;
           font_family = "Maple Mono";
 
           shadow_passes = 3;
-          color = "rgba(235, 219, 178, 0.9)";
+          color = "$text";
 
-          position = "0, -350";
+          position = "0, -450";
           halign = "center";
           valign = "top";
         }
-        # Username
-        {
-          text = "  $USER";
-
-          font_size = 15;
-          font_family = "Maple Mono Bold";
-
-          color = "rgba(235, 219, 178, 1)";
-
-          position = "0, 284";
-          halign = "center";
-          valign = "bottom";
-        }
       ];
-
-      input-field = [
-        {
-          size = "300, 50";
-          rounding = 0;
-          outline_thickness = 2;
-
-          dots_spacing = 0.4;
-
-          font_color = "rgba(235, 219, 178, 0.9)";
-          font_family = "Maple Mono Bold";
-
-          outer_color = "rgba(168, 153, 132, 0.95)";
-          inner_color = "rgba(102, 92, 84, 0.33)";
-          check_color = "rgba(152, 151, 26, 0.95)";
-          fail_color = "rgba(204, 36, 29, 0.95)";
-          capslock_color = "rgba(215, 153, 33, 0.95)";
-          bothlock_color = "rgba(215, 153, 33, 0.95)";
-
-          hide_input = false;
-          fade_on_empty = false;
-          placeholder_text = ''<i><span foreground="##fbf1c7">Enter Password</span></i>'';
-
-          position = "0, 200";
-          halign = "center";
-          valign = "bottom";
-        }
-      ];
-
-      animation = [ "inputFieldColors, 0" ];
     };
   };
 }
